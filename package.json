@@ -1,7 +1,6 @@
 {
   "name": "muvluv-srpg-assist",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,6 +12,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
-    "vite": "^4.0.0"
+    "vite": "^4.5.0"
   }
 }

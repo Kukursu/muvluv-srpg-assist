@@ -16,17 +16,28 @@ export default function App() {
   const [direction, setDirection] = useState('front');
   const [evasionMode, setEvasionMode] = useState('normal');
   const [hitPart, setHitPart] = useState('torso');
-  const [log, setLog] = useState([]);
+  const [log, setLog] = useState(['🔍 初期化ログ：App動作確認']);
   const [targetHP, setTargetHP] = useState(0);
 
+  // 初期HP設定（ユニット存在確認付き）
   useEffect(() => {
-    const initial = units[attacker]?.partsHP?.[hitPart] ?? 0;
-    setTargetHP(initial);
+    const hp = units?.[attacker]?.partsHP?.[hitPart] ?? 0;
+    setTargetHP(hp);
   }, [attacker, hitPart]);
 
   const handleAttack = () => {
-    const weaponData = weapons[weapon];
-    const unitData = units[attacker];
+    const weaponData = weapons?.[weapon];
+    const unitData = units?.[attacker];
+    const targetData = units?.[target];
+
+    if (!weaponData || !unitData || !targetData) {
+      setLog([
+        '⚠️ データ読み込みエラー：unit or weapon not found',
+        `weapon=${!!weaponData}, attacker=${!!unitData}, target=${!!targetData}`
+      ]);
+      return;
+    }
+
     const baseHit = weaponData.hitRate;
     const attackRoll = rollD100();
     const hit = attackRoll <= baseHit;
@@ -46,19 +57,22 @@ export default function App() {
     const successCount = countSuccess(evasionRolls, evasionRate);
     const hits = 5 - successCount;
 
-    const directionArmor = unitData.armor[direction];
-    const partArmor = unitData.partsArmor[hitPart];
+    // 安全装甲参照
+    const directionArmor = unitData.armor?.[direction] ?? 0;
+    const partArmor = unitData.partsArmor?.[hitPart] ?? 0;
     const effectiveArmor = Math.floor((directionArmor + partArmor) / 2);
+
     const perHit = calculateDamagePerHit(weaponData.damage, effectiveArmor);
     const total = calculateTotalDamage(perHit, hits);
     const newHP = applyDamageToHP(targetHP, total);
+    const maxHP = targetData.partsHP?.[hitPart] ?? 0;
 
     newLog.push(`🌀 [${target}]は回避（回避率${evasionRate}%）を選択`);
     newLog.push(`🎲 回避判定：${evasionRolls.join(', ')} → ${successCount}回成功 → ${hits}ヒット！`);
     newLog.push(`💥 ダメージ処理：`);
     newLog.push(`　命中方向：${direction} → 装甲（方向＋部位）：${directionArmor}＋${partArmor}`);
     newLog.push(`　1ヒットあたり：${perHit} × ${hits} = ${total}`);
-    newLog.push(`　${hitPart}残HP：${newHP}／${unitData.partsHP[hitPart]} → ${newHP <= 10 ? '⚠️機能低下！' : '正常稼働'}`);
+    newLog.push(`　${hitPart}残HP：${newHP}／${maxHP} → ${newHP <= 10 ? '⚠️機能低下！' : '正常稼働'}`);
 
     setTargetHP(newHP);
     setLog(newLog);

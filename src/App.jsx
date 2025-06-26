@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import weapons from './data/weapons.json';
-import units from './data/units.json';
-import { rollD100, rollMultipleD100, countSuccess } from './utils/dice';
-import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from './utils/damageCalc';
-import WeaponSelector from './components/WeaponSelector';
-import DirectionSelector from './components/DirectionSelector';
-import EvasionSelector from './components/EvasionSelector';
-import CombatLog from './components/CombatLog';
-import HitPartSelector from './components/HitPartSelector';
+import React, { useState, useEffect } from 'react';
+import weapons from '../data/weapons.json';
+import units from '../data/units.json';
+import { rollD100, rollMultipleD100, countSuccess } from '../utils/dice';
+import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from '../utils/damageCalc';
+import WeaponSelector from '../components/WeaponSelector';
+import DirectionSelector from '../components/DirectionSelector';
+import EvasionSelector from '../components/EvasionSelector';
+import CombatLog from '../components/CombatLog';
+import HitPartSelector from '../components/HitPartSelector';
 
 export default function App() {
   const [attacker] = useState('激震');
@@ -17,10 +17,12 @@ export default function App() {
   const [evasionMode, setEvasionMode] = useState('normal');
   const [hitPart, setHitPart] = useState('torso');
   const [log, setLog] = useState([]);
-  const [targetHP, setTargetHP] = useState(() => {
-    const data = units[target];
-    return data?.partsHP?.[hitPart] ?? 100;
-  });
+  const [targetHP, setTargetHP] = useState(0);
+
+  useEffect(() => {
+    const initial = units[attacker]?.partsHP?.[hitPart] ?? 0;
+    setTargetHP(initial);
+  }, [attacker, hitPart]);
 
   const handleAttack = () => {
     const weaponData = weapons[weapon];

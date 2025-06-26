@@ -1,0 +1,27 @@
+{
+  "激震": {
+    "name": "激震",
+    "armor": {
+      "front": 6,
+      "back": 3,
+      "left": 5,
+      "right": 5
+    },
+    "partsHP": {
+      "head": 20,
+      "torso": 40,
+      "leftArm": 15,
+      "rightArm": 15,
+      "legs": 25,
+      "addon": 10
+    },
+    "partsArmor": {
+      "head": 3,
+      "torso": 6,
+      "leftArm": 4,
+      "rightArm": 4,
+      "legs": 5,
+      "addon": 2
+    }
+  }
+}

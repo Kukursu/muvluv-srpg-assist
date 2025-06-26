@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import weapons from './data/weapons.json';
-import units from './data/units.json';
-import { rollD100, rollMultipleD100, countSuccess } from './utils/dice';
-import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from './utils/damageCalc';
+import weapons from '../data/weapons.json';
+import units from '../data/units.json';
+import { rollD100, rollMultipleD100, countSuccess } from '../utils/dice';
+import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from '../utils/damageCalc';
 import WeaponSelector from './components/WeaponSelector';
 import DirectionSelector from './components/DirectionSelector';
 import EvasionSelector from './components/EvasionSelector';

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import weapons from '../data/weapons.json';
-import units from '../data/units.json';
-import { rollD100, rollMultipleD100, countSuccess } from '../utils/dice';
-import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from '../utils/damageCalc';
-import WeaponSelector from '../components/WeaponSelector';
-import DirectionSelector from '../components/DirectionSelector';
-import EvasionSelector from '../components/EvasionSelector';
-import CombatLog from '../components/CombatLog';
-import HitPartSelector from '../components/HitPartSelector';
+import weapons from './data/weapons.json';
+import units from './data/units.json';
+import { rollD100, rollMultipleD100, countSuccess } from './utils/dice';
+import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from './utils/damageCalc';
+import WeaponSelector from './components/WeaponSelector';
+import DirectionSelector from './components/DirectionSelector';
+import EvasionSelector from './components/EvasionSelector';
+import CombatLog from './components/CombatLog';
+import HitPartSelector from './components/HitPartSelector';
 
 export default function App() {
   const [attacker] = useState('激震');

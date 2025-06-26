@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import weapons from './data/weapons.json';
-import units from './data/units.json';
-import { rollD100, rollMultipleD100, countSuccess } from './utils/dice';
-import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from './utils/damageCalc';
-import WeaponSelector from './components/WeaponSelector';
-import DirectionSelector from './components/DirectionSelector';
-import EvasionSelector from './components/EvasionSelector';
-import CombatLog from './components/CombatLog';
-import HitPartSelector from './components/HitPartSelector';
+import weapons from '../data/weapons.json';
+import units from '../data/units.json';
+import { rollD100, rollMultipleD100, countSuccess } from '../utils/dice';
+import { calculateDamagePerHit, calculateTotalDamage, applyDamageToHP } from '../utils/damageCalc';
+import WeaponSelector from '../components/WeaponSelector';
+import DirectionSelector from '../components/DirectionSelector';
+import EvasionSelector from '../components/EvasionSelector';
+import CombatLog from '../components/CombatLog';
+import HitPartSelector from '../components/HitPartSelector';
 
 export default function App() {
   const [attacker] = useState('激震');
@@ -17,7 +17,10 @@ export default function App() {
   const [evasionMode, setEvasionMode] = useState('normal');
   const [hitPart, setHitPart] = useState('torso');
   const [log, setLog] = useState([]);
-  const [targetHP, setTargetHP] = useState(units[attacker].partsHP[hitPart]);
+  const [targetHP, setTargetHP] = useState(() => {
+    const data = units[target];
+    return data?.partsHP?.[hitPart] ?? 100;
+  });
 
   const handleAttack = () => {
     const weaponData = weapons[weapon];
@@ -63,11 +66,29 @@ export default function App() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-bold">SRPG支援：App⑵（外部データ＆部品構造）</h1>
 
-      <WeaponSelector weapons={weapons} selectedWeapon={weapon} onChange={setWeapon} />
-      <DirectionSelector direction={direction} onChange={setDirection} />
-      <EvasionSelector evasionMode={evasionMode} onChange={setEvasionMode} />
-      <HitPartSelector hitPart={hitPart} onChange={setHitPart} />
+      <WeaponSelector
+        weapons={weapons}
+        selectedWeapon={weapon}
+        onChange={setWeapon}
+      />
+
+      <DirectionSelector
+        direction={direction}
+        onChange={setDirection}
+      />
+
+      <EvasionSelector
+        evasionMode={evasionMode}
+        onChange={setEvasionMode}
+      />
+
+      <HitPartSelector
+        hitPart={hitPart}
+        onChange={setHitPart}
+      />
+
       <button onClick={handleAttack} className="px-4 py-2 bg-blue-600 text-white rounded">攻撃実行！</button>
+
       <CombatLog log={log} />
     </div>
   );
